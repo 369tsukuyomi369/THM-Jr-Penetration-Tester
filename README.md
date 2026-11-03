@@ -11,3 +11,9 @@ My cybersecurity learning journey.
 
 ## Platform
 TryHackMe
+
+## Current Progress
+
+- Completed Git Lesson 1.
+- Completed Git Lesson 2.
+- Learning version control.
