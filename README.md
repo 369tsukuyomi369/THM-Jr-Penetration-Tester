@@ -23,3 +23,7 @@ TryHackMe
 - Practicing Git status.
 - Learning how to stage changes.
 - Learning how to commit and push updates.
+
+## Branch Practice
+
+This section was created on the practice branch.
