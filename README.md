@@ -16,7 +16,7 @@ TryHackMe
 
 - Completed Git Lesson 1.
 - Completed Git Lesson 2.
-- Learning version control.git status
+- Learning version control.
 
 ## Git Practice
 
