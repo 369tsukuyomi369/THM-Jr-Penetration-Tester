@@ -29,3 +29,5 @@ TryHackMe
 This section was created on the practice branch.
 
 This sentence was written on the main branch.
+
+This sentence was written on the practice branch.
