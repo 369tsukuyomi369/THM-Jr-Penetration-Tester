@@ -31,7 +31,34 @@ Write-ups use the sections appropriate to the topic. Practical results reflect w
 
 **Status: In progress.**
 
-I am currently working through the TryHackMe Jr Penetration Tester learning path. Documentation will grow one topic, command, or lab at a time as I continue learning.
+I completed a few rooms before starting this repository. Documentation begins with my current room and will grow from the topics, commands, and lab results I record as I continue the learning path.
+
+Earlier rooms may not have write-ups. Section folders organize the documentation; they do not represent completion status.
+
+## Learning Path Sections
+
+The numbered folders follow the section order in the [TryHackMe Jr Penetration Tester learning path](https://tryhackme.com/path/outline/jrpenetrationtester). Room write-ups will be added to the corresponding section as they are documented.
+
+| Section | Documentation |
+| --- | --- |
+| 01 | [Start Your Cyber Security Journey](./01-start-your-cyber-security-journey/) |
+| 02 | [Penetration Testing Foundations](./02-penetration-testing-foundations/) |
+| 03 | [Network Reconnaissance](./03-network-reconnaissance/) |
+| 04 | [Nmap](./04-nmap/) |
+| 05 | [Web Application Security Fundamentals](./05-web-application-security-fundamentals/) |
+| 06 | [Burp Suite](./06-burp-suite/) |
+| 07 | [Web Application Vulnerabilities I](./07-web-application-vulnerabilities-i/) |
+| 08 | [Web Application Vulnerabilities II](./08-web-application-vulnerabilities-ii/) |
+| 09 | [Vulnerability Knowledge](./09-vulnerability-knowledge/) |
+| 10 | [OWASP Top 10 (2025)](./10-owasp-top-10-2025/) |
+| 11 | [Password Attacks](./11-password-attacks/) |
+| 12 | [Metasploit and Exploitation](./12-metasploit-and-exploitation/) |
+| 13 | [Privilege Escalation](./13-privilege-escalation/) |
+| 14 | [Active Directory Security Testing Basics](./14-active-directory-security-testing-basics/) |
+| 15 | [Specialized Domains](./15-specialized-domains/) |
+| 16 | [Python Scripting Basics](./16-python-scripting-basics/) |
+| 17 | [Pentesting Methodologies and Reporting](./17-pentesting-methodologies-and-reporting/) |
+| 18 | [Jr Pentester Challenges](./18-jr-pentester-challenges/) |
 
 ## Responsible Use and Disclosure
 

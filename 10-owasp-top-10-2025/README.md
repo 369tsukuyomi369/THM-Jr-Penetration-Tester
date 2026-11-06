@@ -1,0 +1,7 @@
+# 10. OWASP Top 10 (2025)
+
+Notes and walkthroughs for this section of the [TryHackMe Jr Penetration Tester learning path](https://tryhackme.com/path/outline/jrpenetrationtester).
+
+No room write-ups have been added to this folder yet. This describes documentation coverage, not room completion.
+
+[Back to the repository overview](../README.md)
