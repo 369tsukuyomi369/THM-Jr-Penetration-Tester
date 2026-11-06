@@ -2,7 +2,7 @@
 
 **Section:** 05 — Web Application Security Fundamentals  
 **Room:** 03  
-**Documentation:** In progress; introduction recorded.
+**Documentation:** In progress; introduction recorded and Task 2 outlined.
 
 ## Introduction
 
@@ -46,5 +46,37 @@ These are room-provided setup details. Service availability, versions, and explo
 ## Important Note
 
 A version banner such as `Server: Apache/2.4.49` is a useful clue, but does not by itself prove exploitability. Headers can be modified or hidden; corroborate the fingerprint and verify the vulnerability's required conditions. See [OWASP's web server fingerprinting guidance](https://wstg.owasp.org/v4.2/4-Web_Application_Security_Testing/01-Information_Gathering/02-Fingerprint_Web_Server/).
+
+## Task 2 — MERN Stack
+
+*Outline to expand with my own explanations and lab evidence.*
+
+### Stack Components
+
+- Roles of MongoDB, Express.js, React, and Node.js.
+
+### Fingerprinting
+
+- HTTP headers, session cookies, error responses, and frontend clues.
+- Corroborating observations and recognizing the limits of individual signals.
+
+### Requests and Sessions
+
+- HTTP methods, JSON request bodies, and cookie persistence with `curl`.
+- Comparing ordinary application behavior with access-controlled behavior.
+
+### Prototype Pollution
+
+- JavaScript prototype inheritance and unsafe recursive object merging.
+- How inherited properties can affect authorization checks.
+
+### Practical Observations
+
+- Add my own commands, observations, and redacted evidence.
+- Distinguish expected behavior from results actually observed.
+
+### Key Takeaways
+
+- Summarize the root cause, limitations, and security lessons.
 
 [Back to the section overview](./README.md)

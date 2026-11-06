@@ -6,7 +6,7 @@ Notes and walkthroughs for this section of the [TryHackMe Jr Penetration Tester 
 
 | Room | Write-up | Documentation coverage |
 | --- | --- | --- |
-| 03 | [Modern Web Stacks](./03-modern-web-stacks.md) | Introduction documented; write-up in progress. |
+| 03 | [Modern Web Stacks](./03-modern-web-stacks.md) | Introduction documented; Task 2 outlined. |
 
 Documentation coverage does not indicate room completion.
 
