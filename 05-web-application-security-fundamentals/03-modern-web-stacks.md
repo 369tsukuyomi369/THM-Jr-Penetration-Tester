@@ -49,7 +49,7 @@ A version banner such as `Server: Apache/2.4.49` is a useful clue, but does not 
 
 ## Task 2 — MERN Stack
 
-These notes summarize my own Kali terminal session against the authorized lab service on port `3000`. Quiz-answer identifiers, session values, protected response content, and the exploit request are excluded.
+These notes summarize my own Kali terminal session against the authorized lab service on port `3000`. Room answers, session values, and protected response values are excluded.
 
 ### Stack Components and Fingerprinting
 
@@ -90,7 +90,7 @@ Cookie persistence lets separate requests reuse session state. Possessing a sess
 | Session capture | The root request with `-c cookies.txt` returned the application's HTML page; later requests used `-b cookies.txt`. |
 | Protected resource before testing | Access was denied both without cookie replay and when replaying the saved session. |
 | Ordinary JSON update | The server returned `{"status":"updated"}`. I did not separately retrieve the saved profile fields. |
-| Lab vulnerability test | The update was acknowledged, and a subsequent request returned previously protected content. The payload and protected response are excluded. |
+| Lab vulnerability test | The update was acknowledged, and a subsequent request returned previously protected content. The protected response value is excluded. |
 
 Only the initial HEAD request displayed an HTTP status line. The remaining observations describe response bodies; their HTTP status codes were not captured in this transcript.
 
@@ -109,6 +109,10 @@ Selected evidence from the same terminal session.
 **Ordinary profile update and acknowledgement**
 
 ![JSON profile-update request and the server's acknowledgement](./assets/modern-web-stacks/mern-normal-profile-update.png)
+
+**Prototype pollution test and acknowledgement**
+
+![Prototype pollution request from my lab session and the server's update acknowledgement](./assets/modern-web-stacks/mern-prototype-pollution-request.png)
 
 **Protected response with the answer redacted**
 
