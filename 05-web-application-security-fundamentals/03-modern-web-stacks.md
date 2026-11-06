@@ -2,7 +2,7 @@
 
 **Section:** 05 — Web Application Security Fundamentals  
 **Room:** 03  
-**Documentation:** In progress; Task 1 introduction and Task 2 practical notes with selected screenshots recorded.
+**Documentation:** In progress; Task 1 introduction and Tasks 2–3 practical notes with selected screenshots recorded.
 
 ## Task 1 — Introduction
 
@@ -35,7 +35,7 @@ The room describes an Ubuntu 22.04 virtual machine with four services:
 
 Access is through the TryHackMe AttackBox or a machine connected to the lab through the TryHackMe VPN.
 
-The table records the room-provided setup. The Task 2 transcript below documents requests to port `3000`; it does not independently verify the other services or software versions.
+The table records the room-provided setup. Task 2 documents requests to port `3000`, and Task 3 records Next.js-related responses on port `3001`. The remaining services and exact software versions have not been independently verified.
 
 ### Prerequisites
 
@@ -130,5 +130,80 @@ Selected evidence from the same terminal session.
 Prototype pollution occurs when untrusted data changes properties on a JavaScript prototype. Code that reads a missing own property may then obtain an inherited value, which can affect an authorization decision. An own property takes precedence over an inherited one, and objects with a null prototype do not inherit from `Object.prototype`.
 
 The main defensive lessons are to validate permitted input fields, use safe merging, and keep authorization state under trusted server-side control. Own-property checks can prevent inherited values being mistaken for explicit state, but do not make user-controlled privilege fields safe. See [MDN's prototype pollution guidance](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/Prototype_pollution).
+
+## Task 3 — React / Next.js
+
+React provides the UI components, while Next.js adds routing and server-side rendering. This task focuses on identifying a Next.js App Router application and understanding how middleware authorization can fail.
+
+### Fingerprinting and React Server Components
+
+| Clue in my responses | Interpretation |
+| --- | --- |
+| `X-Powered-By: Next.js` | The server identifies itself as Next.js. |
+| `Vary` includes `RSC` and `Next-Router-*` entries | Consistent with App Router requests and different response representations. |
+| `x-nextjs-cache: HIT` and prerender headers | Next.js cache and prerender metadata for the requested page. |
+| `/_next/static/` asset paths | Framework-generated JavaScript assets in the returned HTML. |
+| `self.__next_f.push(...)` scripts | Inline data associated with Next.js streaming the React Server Component payload. |
+
+Together, these clues support the framework identification; they do not establish an exact version.
+
+React Server Components render on the server. Their rendered tree, references to Client Components, and passed props travel in the RSC payload using React's Flight format. On the first load, Next.js also returns HTML; the browser uses the payload to reconcile the component tree and JavaScript to hydrate interactive Client Components. Data sent to the browser remains visible to the client. See the [Next.js component documentation](https://nextjs.org/docs/app/getting-started/server-and-client-components).
+
+### Commands and Options
+
+These commands are from my terminal session, with the lab address replaced by `<LAB_IP>`.
+
+```bash
+curl -I "http://<LAB_IP>:3001/"
+curl -v "http://<LAB_IP>:3001/dashboard"
+```
+
+| Option | Purpose |
+| --- | --- |
+| `-I` | Sends HEAD and displays response headers without the body. |
+| `-v` | Displays connection details and request/response headers alongside the response body. |
+| `-H` | Supplies a request header; used in the later lab comparison. |
+
+The dashboard command does not use `-L`, so curl displays the initial redirect instead of following it.
+
+### Practical Observations
+
+| Check | Observed result |
+| --- | --- |
+| Root HEAD request | `HTTP/1.1 200 OK`, an HTML content type, and the Next.js-related headers above. |
+| Ordinary dashboard request | `HTTP/1.1 307 Temporary Redirect` with `Location: /login`. |
+| Modified request in the lab | Dashboard HTML was returned, including Next.js assets and inline RSC data. |
+
+The modified request captured the response body without a status line. The observed access change is consistent with the middleware-bypass scenario; no remote code execution was tested.
+
+### Screenshots
+
+**Next.js response headers**
+
+![Root HEAD response showing Next.js, RSC, router, and cache headers](./assets/modern-web-stacks/nextjs-response-headers.png)
+
+**Dashboard access before the lab comparison**
+
+![Ordinary dashboard request returning a 307 redirect to the login page](./assets/modern-web-stacks/nextjs-dashboard-redirect.png)
+
+### Middleware Authorization — CVE-2025-29927
+
+Middleware can check an incoming request before a protected page is reached. Affected Next.js versions trusted an internal `x-middleware-subrequest` header in a way that allowed middleware execution to be skipped. Applications relying entirely on those middleware checks could expose protected routes.
+
+The room also distinguishes middleware placed at the project root from middleware under `src`; project layout affects its internal identification. The important lesson is the trust boundary: client-supplied metadata must not decide whether an authorization check runs.
+
+For local reproduction, the room specifies a production build: `npm run build` followed by `npm start`, with scripts mapped to `next build` and `next start`. Development mode (`next dev`) is a different execution environment. These are setup notes, not commands shown in my terminal evidence. See the [Next.js CLI reference](https://nextjs.org/docs/app/api-reference/cli/next).
+
+### Related RSC Vulnerability — CVE-2025-55182
+
+This is a separate issue involving unsafe decoding of requests in affected React Server Components packages, potentially allowing unauthenticated remote code execution. Finding RSC markers alone does not demonstrate this vulnerability. It is included as context from the task; the recorded lab exercise concerned middleware authorization. See the [React security advisory](https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components).
+
+### Key Takeaways
+
+- Combine header and HTML clues before identifying a stack; check versions and deployment conditions separately.
+- Enforce authorization where protected data is accessed, as well as any early middleware checks.
+- Apply the relevant framework security updates. For CVE-2025-29927, filtering externally supplied `x-middleware-subrequest` headers is the documented interim workaround.
+
+References: [Next.js middleware advisory](https://github.com/vercel/next.js/security/advisories/GHSA-f82v-jwr5-mffw) · [Vercel's technical postmortem](https://vercel.com/blog/postmortem-on-next-js-middleware-bypass).
 
 [Back to the section overview](./README.md)
