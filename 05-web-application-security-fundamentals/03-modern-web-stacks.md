@@ -186,6 +186,10 @@ The modified request captured the response body without a status line. The obser
 
 ![Ordinary dashboard request returning a 307 redirect to the login page](./assets/modern-web-stacks/nextjs-dashboard-redirect.png)
 
+**Dashboard response after the lab comparison**
+
+![Dashboard HTML and inline RSC data after the lab test, with both copies of the flag redacted in the supplied screenshot](./assets/modern-web-stacks/nextjs-dashboard-response-redacted.png)
+
 ### Middleware Authorization — CVE-2025-29927
 
 Middleware can check an incoming request before a protected page is reached. Affected Next.js versions trusted an internal `x-middleware-subrequest` header in a way that allowed middleware execution to be skipped. Applications relying entirely on those middleware checks could expose protected routes.
