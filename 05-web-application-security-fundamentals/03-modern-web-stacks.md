@@ -2,7 +2,7 @@
 
 **Section:** 05 — Web Application Security Fundamentals  
 **Room:** 03  
-**Documentation:** In progress; Task 1 introduction and Tasks 2–3 practical notes with selected screenshots recorded.
+**Documentation:** In progress; Task 1 introduction and Tasks 2–4 practical notes with selected screenshots recorded.
 
 ## Task 1 — Introduction
 
@@ -35,7 +35,7 @@ The room describes an Ubuntu 22.04 virtual machine with four services:
 
 Access is through the TryHackMe AttackBox or a machine connected to the lab through the TryHackMe VPN.
 
-The table records the room-provided setup. Task 2 documents requests to port `3000`, and Task 3 records Next.js-related responses on port `3001`. The remaining services and exact software versions have not been independently verified.
+The table records the room-provided setup. Tasks 2–4 document requests to ports `3000`, `3001`, and `8000`. Task 4 includes a reported database version; the Apache service and other exact software versions have not been independently verified.
 
 ### Prerequisites
 
@@ -209,5 +209,73 @@ This is a separate issue involving unsafe decoding of requests in affected React
 - Apply the relevant framework security updates. For CVE-2025-29927, filtering externally supplied `x-middleware-subrequest` headers is the documented interim workaround.
 
 References: [Next.js middleware advisory](https://github.com/vercel/next.js/security/advisories/GHSA-f82v-jwr5-mffw) · [Vercel's technical postmortem](https://vercel.com/blog/postmortem-on-next-js-middleware-bypass).
+
+## Task 4 — Django
+
+Django is a Python web framework with an object-relational mapper (ORM). This task examines framework fingerprinting, user-controlled sorting, and information exposed through database errors.
+
+### Stack Identity and Fingerprinting
+
+Combine Python/WSGI metadata, admin-page structure, and CSRF-related cookie and form behavior when identifying Django. Security headers are supporting clues shared by many frameworks. Template rendering supplies CSRF form markup; middleware does not automatically insert it into every form.
+
+The lab catalogue is served at `/products/` on port `8000`. My HTML response contained three product entries and a GET form with a hidden `order` input. A hidden input remains client-controlled and needs server-side validation.
+
+### CVE-2021-35042 and the Sorting Input
+
+The official advisory describes insufficient column-reference validation in a deprecated `QuerySet.order_by()` path. The historical fixes were Django **3.1.13** and **3.2.5**.
+
+The room's displayed code directly interpolates the `order` value into a raw SQL sorting expression. That illustrates an application-level injection flaw; confirming the specific CVE requires establishing that the affected ORM code path is used. The always-true condition in the example does not sanitize the supplied expression.
+
+See the [Django security release notice](https://www.djangoproject.com/weblog/2021/jul/01/security-releases/).
+
+### Commands and Options
+
+The baseline command from my terminal session, with the lab IP replaced:
+
+```bash
+curl -s "http://<LAB_IP>:8000/products/"
+```
+
+I then used two error-based checks against the sorting parameter: one for the reported database version and one for the active database identifier.
+
+| Element | Purpose in the recorded commands |
+| --- | --- |
+| `curl -s` | Hides the progress meter and curl error messages; still prints the response body. |
+| `?order=` | Supplies the application's requested sort expression. |
+| `%20` | Encodes a space inside the URL. |
+| `0x7e` | Represents the tilde used as an output marker. |
+| `grep -o` | Prints each matching fragment on its own line. |
+| `[0-9]` / `[0-9a-zA-Z_]` | Restricts the first character matched after the marker. |
+| `[^&]*` | Matches subsequent characters up to an ampersand or the end of the line. |
+
+### Practical Observations
+
+| Check | Observed result |
+| --- | --- |
+| Catalogue request | Returned product HTML and the client-controlled sorting input. |
+| Version check | Printed `8.0.45-0ubuntu0.22.04.1`, prefixed by the chosen marker. |
+| Database-name check | Returned a database identifier; its value is excluded. |
+| Repeated output | Each filtered extraction printed eight matching fragments containing the same respective value. |
+
+Repeated matches describe occurrences in the response text; they do not establish eight requests, queries, or databases. The complete response would be needed to locate each occurrence.
+
+The supplied commands did not capture HTTP status lines, and the filtered output does not show a Django version.
+
+### Error Disclosure and Key Takeaways
+
+Error-based extraction uses database error text as an output channel. In the task's technique, an invalid XPath expression causes `UpdateXML()` to report an error containing the marker and selected value. The result depends on database behavior and whether the application exposes that error.
+
+- Map permitted sort choices to fixed, trusted field names.
+- Parameterize SQL data values; ordinary value placeholders are not a substitute for validating column identifiers or sort expressions.
+- Use a supported, patched Django release.
+- Keep detailed debug pages out of production. Suppressing error details limits disclosure but does not repair an injectable query.
+
+References: [Django raw SQL guidance](https://docs.djangoproject.com/en/3.2/topics/db/sql/) · [Django CSRF integration](https://docs.djangoproject.com/en/5.2/howto/csrf/) · [Django deployment checklist](https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/) · [MySQL XML functions](https://dev.mysql.com/doc/refman/8.0/en/xml-functions.html).
+
+### Screenshots
+
+**Database version check**
+
+![Terminal version-check request and eight repeated matches for the reported database version](./assets/modern-web-stacks/django-database-version-check.png)
 
 [Back to the section overview](./README.md)
