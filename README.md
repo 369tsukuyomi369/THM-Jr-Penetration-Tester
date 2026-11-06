@@ -6,7 +6,7 @@ This repository documents my cybersecurity learning through technical explanatio
 
 ## About Me
 
-I am a Computer Science and Engineering (CSE) student at AIUB, with programming experience in C++ and Java and basic Python knowledge. My interests include ethical hacking, penetration testing, Red Team operations, and bug bounty hunting.
+I am a Computer Science and Engineering (CSE) student, with programming experience in C++ and Java and basic Python knowledge. My interests include ethical hacking, penetration testing, Red Team operations, and bug bounty hunting.
 
 ## Learning Goals
 
