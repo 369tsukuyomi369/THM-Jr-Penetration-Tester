@@ -254,7 +254,7 @@ I then used two error-based checks against the sorting parameter: one for the re
 | --- | --- |
 | Catalogue request | Returned product HTML and the client-controlled sorting input. |
 | Version check | Printed `8.0.45-0ubuntu0.22.04.1`, prefixed by the chosen marker. |
-| Database-name check | Returned a database identifier; its value is excluded. |
+| Database-name check | Returned the active database identifier shown in the screenshot below. |
 | Repeated output | Each filtered extraction printed eight matching fragments containing the same respective value. |
 
 Repeated matches describe occurrences in the response text; they do not establish eight requests, queries, or databases. The complete response would be needed to locate each occurrence.
@@ -277,5 +277,9 @@ References: [Django raw SQL guidance](https://docs.djangoproject.com/en/3.2/topi
 **Database version check**
 
 ![Terminal version-check request and eight repeated matches for the reported database version](./assets/modern-web-stacks/django-database-version-check.png)
+
+**Database-name check**
+
+![Terminal database-name check showing the repeated database identifier](./assets/modern-web-stacks/django-database-name-check.png)
 
 [Back to the section overview](./README.md)
