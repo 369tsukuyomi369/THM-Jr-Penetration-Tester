@@ -2,7 +2,7 @@
 
 **Section:** 05 — Web Application Security Fundamentals  
 **Room:** 03  
-**Documentation:** In progress; introduction and Task 2 practical notes recorded.
+**Documentation:** In progress; introduction and Task 2 practical notes with selected screenshots recorded.
 
 ## Introduction
 
@@ -93,6 +93,26 @@ Cookie persistence lets separate requests reuse session state. Possessing a sess
 | Lab vulnerability test | The update was acknowledged, and a subsequent request returned previously protected content. The payload and protected response are excluded. |
 
 Only the initial HEAD request displayed an HTTP status line. The remaining observations describe response bodies; their HTTP status codes were not captured in this transcript.
+
+### Screenshots
+
+Selected evidence from the same terminal session.
+
+**Route handling and the initial access check**
+
+![Unmatched GET requests and denied access before the lab test](./assets/modern-web-stacks/mern-route-and-access-checks.png)
+
+**Homepage request using the cookie-jar option**
+
+![Request using curl's cookie-jar option and the returned homepage](./assets/modern-web-stacks/mern-session-cookie-jar.png)
+
+**Ordinary profile update and acknowledgement**
+
+![JSON profile-update request and the server's acknowledgement](./assets/modern-web-stacks/mern-normal-profile-update.png)
+
+**Protected response with the answer redacted**
+
+![Protected response with the answer obscured in the supplied screenshot](./assets/modern-web-stacks/mern-protected-response-redacted.png)
 
 ### Interpretation and Limitations
 
