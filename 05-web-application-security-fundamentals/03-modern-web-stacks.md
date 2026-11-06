@@ -2,19 +2,19 @@
 
 **Section:** 05 — Web Application Security Fundamentals  
 **Room:** 03  
-**Documentation:** In progress; introduction and Task 2 practical notes with selected screenshots recorded.
+**Documentation:** In progress; Task 1 introduction and Task 2 practical notes with selected screenshots recorded.
 
-## Introduction
+## Task 1 — Introduction
 
 Web stack fingerprinting uses response headers, cookie names, error messages, URL patterns, and HTML source to identify the technologies behind a web application. These clues help focus version checks and vulnerability research.
 
-## Workflow
+### Workflow
 
 1. **Fingerprint:** inspect ordinary HTTP responses before sending exploit payloads.
 2. **Verify:** corroborate the technology and version, then check relevant CVE advisories and their applicability.
 3. **Validate in the lab:** test the applicable vulnerability, understand its root cause, and record the observed impact.
 
-## Learning Objectives
+### Learning Objectives
 
 | Technology | CVE | Focus |
 | --- | --- | --- |
@@ -22,7 +22,7 @@ Web stack fingerprinting uses response headers, cookie names, error messages, UR
 | Django | [CVE-2021-35042](https://www.djangoproject.com/weblog/2021/jul/01/security-releases/) | SQL injection through unsanitized input to `QuerySet.order_by()`, with database extraction as the lab objective. |
 | Apache HTTP Server 2.4.49 | [CVE-2021-41773](https://httpd.apache.org/security/vulnerabilities_24.html#CVE-2021-41773) | Path traversal and file disclosure; remote code execution (RCE) depends on access controls and CGI configuration. |
 
-## Lab Environment
+### Lab Environment
 
 The room describes an Ubuntu 22.04 virtual machine with four services:
 
@@ -37,13 +37,13 @@ Access is through the TryHackMe AttackBox or a machine connected to the lab thro
 
 The table records the room-provided setup. The Task 2 transcript below documents requests to port `3000`; it does not independently verify the other services or software versions.
 
-## Prerequisites
+### Prerequisites
 
 - [HTTP in Detail](https://tryhackme.com/room/httpindetail)
 - [Linux Shells](https://tryhackme.com/room/linuxshells)
 - [Networking Essentials](https://tryhackme.com/room/networkingessentials)
 
-## Important Note
+### Important Note
 
 A version banner such as `Server: Apache/2.4.49` is a useful clue, but does not by itself prove exploitability. Headers can be modified or hidden; corroborate the fingerprint and verify the vulnerability's required conditions. See [OWASP's web server fingerprinting guidance](https://wstg.owasp.org/v4.2/4-Web_Application_Security_Testing/01-Information_Gathering/02-Fingerprint_Web_Server/).
 
