@@ -1,4 +1,5 @@
 # Modern Web Stacks
+(./assets/modern-web-stacks/logo.png)
 
 **Section:** 05 — Web Application Security Fundamentals  
 **Room:** 03  
