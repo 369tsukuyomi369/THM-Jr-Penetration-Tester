@@ -1,5 +1,6 @@
 # Modern Web Stacks
-![](./assets/modern-web-stacks/logo.png)
+
+<img src="./assets/modern-web-stacks/logo.png" alt="Modern Web Stacks room logo" width="128">
 
 **Section:** 05 — Web Application Security Fundamentals  
 **Room:** 03  
