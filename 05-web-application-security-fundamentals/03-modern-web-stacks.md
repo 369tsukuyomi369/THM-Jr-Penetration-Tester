@@ -2,7 +2,7 @@
 
 **Section:** 05 — Web Application Security Fundamentals  
 **Room:** 03  
-**Documentation:** In progress; Task 1 introduction and Tasks 2–4 practical notes with selected screenshots recorded.
+**Documentation:** In progress. Task 1 covers the introduction. Tasks 2–5 include practical notes and screenshots.
 
 ## Task 1 — Introduction
 
@@ -35,7 +35,7 @@ The room describes an Ubuntu 22.04 virtual machine with four services:
 
 Access is through the TryHackMe AttackBox or a machine connected to the lab through the TryHackMe VPN.
 
-The table records the room-provided setup. Tasks 2–4 document requests to ports `3000`, `3001`, and `8000`. Task 4 includes a reported database version; the Apache service and other exact software versions have not been independently verified.
+The table describes the room setup. Tasks 2–5 document requests to all four ports. Task 4 records the database version reported by the lab. Task 5 records Apache response headers and the account identity returned by a command on the server.
 
 ### Prerequisites
 
@@ -281,5 +281,73 @@ References: [Django raw SQL guidance](https://docs.djangoproject.com/en/3.2/topi
 **Database-name check**
 
 ![Terminal database-name check showing the repeated database identifier](./assets/modern-web-stacks/django-database-name-check.png)
+
+## Task 5 — LAMP
+
+LAMP combines Linux, Apache, MySQL, and PHP. Linux provides the operating system, Apache serves HTTP requests, MySQL stores data, and PHP runs application logic. I tested the Apache service on port `8080` to see whether a request could reach files and execute commands outside the published directory.
+
+### Fingerprinting Apache
+
+I started with three requests from Kali. Replace `<LAB_IP>` with the address of the lab machine.
+
+```bash
+curl -I "http://<LAB_IP>:8080/"
+curl -v "http://<LAB_IP>:8080/nonexistent" 2>&1
+curl -v "http://<LAB_IP>:8080/cgi-bin/" 2>&1
+```
+
+| Request | Response | Observation |
+| --- | --- | --- |
+| HEAD `/` | `200 OK` | The server advertised an Apache release associated with the traversal advisory. The response had an HTML content type. |
+| GET `/nonexistent` | `404 Not Found` | The version appeared in the headers. The HTML body contained a generic error message. |
+| GET `/cgi-bin/` | `403 Forbidden` | Apache denied the direct directory request. Establishing whether it could execute a CGI program required a separate test. |
+
+The `-I` option sends a HEAD request. With `-v`, curl shows the request and response headers. The shell redirection `2>&1` combines curl's diagnostic output with the response body in the terminal.
+
+### Path traversal and CGI execution
+
+A change to path normalization in Apache 2.4.49 allowed encoded parent-directory segments to resolve outside directories mapped by an alias. File disclosure depended on Apache's access rules. When CGI execution was enabled for the affected mapping, a request that reached an executable could also run it. The initial fix in 2.4.50 was incomplete. Apache addressed the follow-up vulnerability in 2.4.51. [CVE-2021-41773](https://httpd.apache.org/security/vulnerabilities_24.html#CVE-2021-41773) · [CVE-2021-42013](https://httpd.apache.org/security/vulnerabilities_24.html#CVE-2021-42013)
+
+During the lab check I preserved the request path so the server received the segments I wanted to test. Curl's `--data` option sent the POST body. The CGI program wrote a content-type header and a blank line before its command output so Apache could return the result. [curl manual](https://curl.se/docs/manpage.html) · [Apache CGI guide](https://httpd.apache.org/docs/2.4/howto/cgi.html)
+
+### Practical observations
+
+| Check | What my terminal showed |
+| --- | --- |
+| Execute `id` | The response reported UID 1 and GID 1, both named `daemon`. This showed that the request ran a command with the service account's privileges. |
+| Read `/etc/passwd` | The response contained account records with numeric IDs, home directories, and login shells. |
+| Read the lab flag file | The response contained the requested file's contents. The screenshot preserves my redaction. |
+
+### Screenshots
+
+Excerpts from my terminal session, in request order.
+
+**Homepage HEAD request**
+
+![HEAD request to the service on port 8080 returning 200 OK](./assets/modern-web-stacks/lamp-apache-response-headers.png)
+
+**Unknown route**
+
+![Verbose request to the nonexistent route returning 404 Not Found](./assets/modern-web-stacks/lamp-not-found-response.png)
+
+**CGI directory**
+
+![Direct request to the CGI directory returning 403 Forbidden](./assets/modern-web-stacks/lamp-cgi-directory-response.png)
+
+**Execution identity**
+
+![Command output showing the daemon user and group](./assets/modern-web-stacks/lamp-command-execution-identity.png)
+
+**System accounts**
+
+![Account records returned from the lab container](./assets/modern-web-stacks/lamp-system-accounts.png)
+
+**Redacted flag response**
+
+![Terminal response with the flag value covered](./assets/modern-web-stacks/lamp-flag-response-redacted.png)
+
+### Key takeaway
+
+Patching Apache fixes the path-handling flaw. Restricting access outside published directories and enabling CGI only where applications need it limit what a request can reach. In this lab, the `id` result identified the account whose file permissions governed the subsequent reads.
 
 [Back to the section overview](./README.md)
