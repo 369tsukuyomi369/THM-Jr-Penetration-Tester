@@ -2,7 +2,7 @@
 
 **Section:** 05 — Web Application Security Fundamentals  
 **Room:** 03  
-**Documentation:** In progress. Task 1 covers the introduction. Tasks 2–5 include practical notes and screenshots. Task 6 reviews the room's example Nikto scans.
+**Documentation:** Complete through Task 7. Tasks 2–5 include practical notes and screenshots. Task 6 reviews the room's example Nikto scans, and Task 7 compares the four CVEs with the lab findings.
 
 ## Task 1 — Introduction
 
@@ -372,5 +372,24 @@ nikto -h "http://<LAB_IP>:<PORT>"
 | `8080` · Apache | 4 | Apache advertised a version, listed TRACE among the allowed methods, and prompted an ETag warning. | The version points to the traversal advisory covered in Task 5. The ETag warning calls for checking which file attributes the server includes. |
 
 Nikto counts informational headers among its reported items, which explains why a larger count can include ordinary cache behavior. The manual checks in Tasks 2 and 4 answer questions the sample reports leave open, such as how the application handles a profile update or a user-supplied sort expression.
+
+## Task 7 — Conclusion
+
+### CVE summary
+
+Each CVE below describes a flaw in a particular component. The scores are CVSS v3.1 base scores from the linked records. The last column records what my manual requests showed in Tasks 2–5.
+
+| Stack and CVE | CVSS v3.1 | Published flaw | Evidence from my lab |
+| --- | --- | --- | --- |
+| MERN / Express · [CVE-2020-8203](https://github.com/advisories/GHSA-p6mc-m468-83gw) | 7.4 High | Affected Lodash functions could modify an object's prototype through user-controlled property paths. | After a profile update, my session could read a previously protected resource. Tracing that result to this specific Lodash flaw would require the installed dependency version and the function the app called. |
+| Next.js middleware · [CVE-2025-29927](https://github.com/vercel/next.js/security/advisories/GHSA-f82v-jwr5-mffw) | 9.1 Critical | A request could skip authorization checks performed in middleware. | An ordinary dashboard request redirected to login. The modified request returned the dashboard HTML. |
+| Django ORM · [CVE-2021-35042](https://ubuntu.com/security/CVE-2021-35042) | 9.8 Critical | A deprecated path in `QuerySet.order_by()` allowed unvalidated column references into a query. | Database errors exposed metadata through the catalogue's sort input. The room's sample view illustrates a separate route to SQL injection by inserting that input directly into raw SQL. |
+| Apache HTTP Server / LAMP · [CVE-2021-41773](https://nvd.nist.gov/vuln/detail/CVE-2021-41773) | 9.8 Critical (NVD) | Path traversal could expose files outside an aliased directory. Permissive access rules and CGI execution could also allow a command to run. | The `id` response identified the executing account as `daemon` (UID 1). Subsequent requests read files with that account's permissions. |
+
+### What I learned
+
+A fingerprint helps me choose an advisory. Before attributing a finding to that CVE, I need to check the affected version and the code path or configuration the advisory describes. The Django example shows why that matters. A framework update can fix the ORM flaw while the application's hand-built sort expression still needs a trusted list of permitted fields.
+
+The comparison I'll reuse is an ordinary request followed by one targeted change. Recording which route became accessible, which data came back, or which account ran a command gives another tester a concrete result to verify.
 
 [Back to the section overview](./README.md)
