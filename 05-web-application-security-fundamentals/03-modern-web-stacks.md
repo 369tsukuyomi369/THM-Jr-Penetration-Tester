@@ -18,6 +18,7 @@ Web stack fingerprinting uses response headers, cookie names, error messages, UR
 
 | Technology | CVE | Focus |
 | --- | --- | --- |
+| MERN / Express (Lodash) | [CVE-2020-8203](https://github.com/advisories/GHSA-p6mc-m468-83gw) | Affected Lodash functions can modify `Object.prototype` when a caller controls the property path. Task 2 illustrates how an inherited property can affect an access check. |
 | Next.js | [CVE-2025-29927](https://github.com/vercel/next.js/security/advisories/GHSA-f82v-jwr5-mffw) | Bypassing authorization checks implemented in middleware. |
 | Django | [CVE-2021-35042](https://www.djangoproject.com/weblog/2021/jul/01/security-releases/) | SQL injection through unsanitized input to `QuerySet.order_by()`, with database extraction as the lab objective. |
 | Apache HTTP Server 2.4.49 | [CVE-2021-41773](https://httpd.apache.org/security/vulnerabilities_24.html#CVE-2021-41773) | Path traversal and file disclosure; remote code execution (RCE) depends on access controls and CGI configuration. |
