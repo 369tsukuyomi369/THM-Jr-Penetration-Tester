@@ -2,7 +2,7 @@
 
 **Section:** 05 — Web Application Security Fundamentals  
 **Room:** 03  
-**Documentation:** In progress. Task 1 covers the introduction. Tasks 2–5 include practical notes and screenshots.
+**Documentation:** In progress. Task 1 covers the introduction. Tasks 2–5 include practical notes and screenshots. Task 6 reviews the room's example Nikto scans.
 
 ## Task 1 — Introduction
 
@@ -349,5 +349,28 @@ Excerpts from my terminal session, in request order.
 ### Key takeaway
 
 Patching Apache fixes the path-handling flaw. Restricting access outside published directories and enabling CGI only where applications need it limit what a request can reach. In this lab, the `id` result identified the account whose file permissions governed the subsequent reads.
+
+## Task 6 — Automation
+
+I reviewed the room's four example scans without running Nikto myself. The findings and item counts below come from the supplied Nikto 2.1.5 output.
+
+### Example command
+
+Nikto probes an HTTP service for details such as response headers, cookie settings, and enabled methods. The `-h` option specifies the target. In the room examples, changing the port selects a different service on the same host. [Nikto basic testing guide](https://github.com/sullo/nikto/wiki/Basic-Testing)
+
+```bash
+nikto -h "http://<LAB_IP>:<PORT>"
+```
+
+### Reading the four scan reports
+
+| Port and service | Items reported | Signals in the room example | How to interpret them |
+| --- | ---: | --- | --- |
+| `3000` · MERN | 7 | A framework header identified Express. Nikto flagged a session cookie missing `HttpOnly`. | The header identifies the web framework. The cookie finding can be checked directly in the HTTP response. |
+| `3001` · Next.js | 19 | Framework, cache, and prerender headers pointed to Next.js. | These headers describe how the page was served. Assessing the middleware bypass also requires the deployed version and authorization behavior. |
+| `8000` · Django | 4 | A Python WSGI banner appeared alongside referrer-policy and MIME-sniffing protections. | The banner identifies a Python serving environment. Application-level clues, such as the catalogue form in Task 4, help identify Django. |
+| `8080` · Apache | 4 | Apache advertised a version, listed TRACE among the allowed methods, and prompted an ETag warning. | The version points to the traversal advisory covered in Task 5. The ETag warning calls for checking which file attributes the server includes. |
+
+Nikto counts informational headers among its reported items, which explains why a larger count can include ordinary cache behavior. The manual checks in Tasks 2 and 4 answer questions the sample reports leave open, such as how the application handles a profile update or a user-supplied sort expression.
 
 [Back to the section overview](./README.md)

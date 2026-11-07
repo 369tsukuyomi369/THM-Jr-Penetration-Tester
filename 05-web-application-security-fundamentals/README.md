@@ -6,7 +6,7 @@ Notes and walkthroughs for this section of the [TryHackMe Jr Penetration Tester 
 
 | Room | Write-up | Documentation coverage |
 | --- | --- | --- |
-| 03 | [Modern Web Stacks](./03-modern-web-stacks.md) | Task 1 introduction and practical notes with screenshots for Tasks 2–5. |
+| 03 | [Modern Web Stacks](./03-modern-web-stacks.md) | Task 1 introduction and practical notes with screenshots for Tasks 2–5. Task 6 reviews the room's example Nikto scans. |
 
 Documentation coverage does not indicate room completion.
 
