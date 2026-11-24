@@ -6,6 +6,6 @@ Notes and walkthroughs for this section of the [TryHackMe Jr Penetration Tester 
 
 | Room | Write-up | Documentation coverage |
 | --- | --- | --- |
-| 02 | [CSRF Introduction](./02-csrf-introduction.md) | Tasks 1–3 cover the StaffHub lab setup, the impact of unwanted account changes, and the conditions that make CSRF possible. |
+| 02 | [CSRF Introduction](./02-csrf-introduction.md) | Tasks 1–4 cover the StaffHub setup, how CSRF affects account changes, and how to review the protections around those changes. |
 
 [Back to the repository overview](../README.md)
