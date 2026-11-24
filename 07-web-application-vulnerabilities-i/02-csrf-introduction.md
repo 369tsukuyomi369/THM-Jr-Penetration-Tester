@@ -66,4 +66,10 @@ Two employees who share a role should still receive independent, unpredictable C
 
 A token can remain valid throughout one session. Seeing the same value twice in that session is expected for a per-session design. A value shared across independent sessions or derived from predictable account data warrants review. [OWASP CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern)
 
+## Task 8 — Conclusion
+
+StaffHub recognized the signed-in employee in both room examples. For an email change, the portal treated the session cookie as sufficient approval. For a role change, it checked a token whose value was predictable. Both checks allowed StaffHub to save an update the employee never chose.
+
+For these settings, the server can require an unpredictable token tied to the employee’s session before saving an update. A reviewer can verify the protection by checking that StaffHub rejects a missing or invalid token before it changes the email address or role on file.
+
 [TryHackMe room](https://tryhackme.com/room/csrfintroduction) · [Back to Section 07](./README.md)
