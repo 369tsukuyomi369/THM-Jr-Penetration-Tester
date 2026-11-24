@@ -6,6 +6,6 @@ Notes and walkthroughs for this section of the [TryHackMe Jr Penetration Tester 
 
 | Room | Write-up | Documentation coverage |
 | --- | --- | --- |
-| 02 | [CSRF Introduction](./02-csrf-introduction.md) | Room notes for Tasks 1–8 cover CSRF fundamentals, StaffHub’s email and role examples, a review checklist, and the [conclusion](./02-csrf-introduction.md#task-8--conclusion). |
+| 02 | [CSRF Introduction](./02-csrf-introduction.md) | Tasks 1–8 include the [email form](./02-csrf-introduction.md#task-5--exploitation-using-an-html-form), the [role token](./02-csrf-introduction.md#task-6--exploitation-over-weak-tokens), shell commands for both examples, a review checklist, and the [conclusion](./02-csrf-introduction.md#task-8--conclusion). |
 
 [Back to the repository overview](../README.md)
