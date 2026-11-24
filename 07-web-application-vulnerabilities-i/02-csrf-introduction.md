@@ -1,5 +1,7 @@
 # CSRF Introduction
 
+<img src="./assets/csrf-introduction/logo.png" alt="CSRF Introduction room logo showing a broken cookie and a padlock" width="128">
+
 Section 07 · Web Application Vulnerabilities I · Room 02
 
 ## Task 1 — Introduction
