@@ -18,4 +18,10 @@ When an employee signs in to StaffHub, the browser stores a cookie that identifi
 2. Give the target about 1–2 minutes to initialize. When using the AttackBox in split view, switch between machines with the tabs at the bottom.
 3. If Chrome displays a keyring prompt in the VM, select **Cancel** to continue.
 
+## Task 2 — What is CSRF?
+
+Imagine an employee leaves StaffHub open in one tab and visits another website in a second tab. A page in the second tab can cause the browser to send a request to StaffHub. If the browser’s cookie settings allow it, the request can carry the employee’s session cookie. StaffHub can then recognize the account even though the employee never opened its settings form.
+
+Cross-site request forgery occurs if StaffHub accepts that request and makes a change the employee never chose. An unwanted email change, for example, could send future account notices to a different inbox. The impact depends on what the signed-in account can do. In another application, an unwanted request could change a security preference or initiate a payment.
+
 [TryHackMe room](https://tryhackme.com/room/csrfintroduction) · [Back to Section 07](./README.md)
