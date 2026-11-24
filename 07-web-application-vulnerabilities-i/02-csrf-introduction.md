@@ -19,6 +19,7 @@ When an employee signs in to StaffHub, the browser stores a cookie that identifi
 1. Start the target VM. Use the TryHackMe AttackBox as the second machine, or connect your own machine through the TryHackMe VPN.
 2. Give the target about 1–2 minutes to initialize. When using the AttackBox in split view, switch between machines with the tabs at the bottom.
 3. If Chrome displays a keyring prompt in the VM, select **Cancel** to continue.
+4. In the lab browser, open `http://staffhub.thm:8080` using the hostname supplied by the room and sign in with the provided training account. The room uses the AttackBox to edit the example files and the target VM for the employee’s signed-in browser.
 
 ## Task 2 — What is CSRF?
 
@@ -46,9 +47,17 @@ A CSRF review starts with what the server does when someone uses a feature. Open
 
 ## Task 5 — Exploitation Using an HTML Form
 
-In the room’s demonstration, an employee is signed in to StaffHub when a form on another page initiates an email change. StaffHub associates the request with the employee’s session and saves the new address without checking where the update originated. The replacement address then appears in StaffHub’s own settings, even though the employee never selected **Update Email**.
+### StaffHub’s email form
 
-StaffHub’s settings form requires an address and checks its format in the browser. An unwanted address can pass both checks. The security decision belongs on the server, where StaffHub can validate a token tied to the employee’s session before saving an edit.
+On the employee’s **Settings** page, **Update Email** submits the new address in the body of a `POST` request. These are the visible controls, simplified from the room’s form.
+
+```html
+<label for="email">New Email Address</label>
+<input id="email" type="email" name="email" required>
+<button type="submit">Update Email</button>
+```
+
+The label’s `for` attribute matches the input’s `id`. The browser uses `name="email"` as the field name in the submission. The `required` and `type="email"` attributes check that the employee entered something shaped like an address. An unwanted replacement address can pass both checks. In the room, the address is the only form value and the server accepts the edit under the existing login session.
 
 ### Room shell commands
 
@@ -59,11 +68,21 @@ nano settings.html
 
 `cd` sets the shell’s working directory to `/var/www/html`. `nano` opens `settings.html` there for editing. If the file is new, Nano creates it on the first save.
 
+### What the second page demonstrated
+
+The room’s second example uses JavaScript to initiate an email change from another page while the employee is signed in. The browser then returns to StaffHub’s **Settings** page. The replacement address displayed in the employee’s profile shows that StaffHub saved the change even though the employee never selected **Update Email** in the portal.
+
 ## Task 6 — Exploitation over Weak Tokens
 
-StaffHub checks a hidden token before saving a change to an employee’s role. The value comes from predictable account information, so a match gives the server little evidence that the request came through its own settings page. In the room’s demonstration, an employee interacts with a banner on another page and StaffHub accepts an unintended change that reduces the account’s permissions.
+### The hidden field in the role form
 
-Two employees who share a role should still receive independent, unpredictable CSRF tokens for their sessions. Before saving a role change, the server should check the submitted token against the one it issued for the current session and reject the update if the token is missing or mismatched.
+StaffHub’s **Update Role** form includes a value that travels with the submission even though it has no visible control on the settings page. The abbreviated field below uses a placeholder for the token value.
+
+```html
+<input type="hidden" name="csrf_token" value="TOKEN_PLACEHOLDER">
+```
+
+The room uses CyberChef in the browser to show that the value represents existing account information. Putting predictable information in a reversible format adds no randomness. Even two employees with the same role should receive independent tokens for their sessions, and the server should validate the submitted token before saving a role change.
 
 ### Room shell commands
 
@@ -72,7 +91,11 @@ cd /var/www/html
 nano role.html
 ```
 
-Task 6 uses the same directory and opens a separate file, `role.html`, in Nano.
+The room uses a separate file for the role example. `nano role.html` opens that file in the working directory selected by `cd`.
+
+### What the banner example demonstrated
+
+The room’s banner example shows a signed-in employee interacting with an image on a separate page. StaffHub associates the request with that employee’s session and accepts the predictable token. The resulting change from administrator to staff reduces the account’s permissions. **Settings** contains the role form, and the room directs the learner to the **Dashboard** to check the outcome.
 
 ## Task 7 — Best Practices
 
