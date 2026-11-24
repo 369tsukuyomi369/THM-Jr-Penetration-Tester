@@ -24,4 +24,14 @@ Imagine an employee leaves StaffHub open in one tab and visits another website i
 
 Cross-site request forgery occurs if StaffHub accepts that request and makes a change the employee never chose. An unwanted email change, for example, could send future account notices to a different inbox. The impact depends on what the signed-in account can do. In another application, an unwanted request could change a security preference or initiate a payment.
 
+## Task 3 — Why CSRF Works
+
+A request can start on one site and arrive at another. When cookie rules permit, the browser sends StaffHub’s session cookie directly to StaffHub. The page that started the request never needs to read the cookie or know the employee’s password.
+
+Three conditions explain how an unwanted profile edit could take effect in the room’s example.
+
+1. The employee is still signed in, and the request reaches StaffHub with a valid session cookie.
+2. The employee’s account has permission to save the edit, such as changing a profile preference.
+3. StaffHub treats the session as sufficient to save the change and skips checking whether the request came from a trusted page.
+
 [TryHackMe room](https://tryhackme.com/room/csrfintroduction) · [Back to Section 07](./README.md)
