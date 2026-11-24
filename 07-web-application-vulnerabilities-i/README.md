@@ -6,6 +6,6 @@ Notes and walkthroughs for this section of the [TryHackMe Jr Penetration Tester 
 
 | Room | Write-up | Documentation coverage |
 | --- | --- | --- |
-| 02 | [CSRF Introduction](./02-csrf-introduction.md) | Tasks 1–6 cover CSRF fundamentals and two StaffHub examples, including an unwanted email change and a role change accepted with a predictable token. |
+| 02 | [CSRF Introduction](./02-csrf-introduction.md) | Tasks 1–7 cover CSRF fundamentals, StaffHub’s email and role changes, and a checklist for reviewing CSRF protection. |
 
 [Back to the repository overview](../README.md)
