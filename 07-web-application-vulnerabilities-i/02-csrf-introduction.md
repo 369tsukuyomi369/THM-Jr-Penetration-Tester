@@ -42,4 +42,10 @@ A CSRF review starts with what the server does when someone uses a feature. Open
 
 `GET` is intended for reading data, and forms often use `POST` to save edits. If a handler writes to an account, either method leaves the server with the same question. What evidence ties this update to a trusted page? For an email change, the server could validate a CSRF token tied to the employee’s session before saving the new address.
 
+## Task 5 — Exploitation Using an HTML Form
+
+In the room’s demonstration, an employee is signed in to StaffHub when a form on another page initiates an email change. StaffHub associates the request with the employee’s session and saves the new address without checking where the update originated. The replacement address then appears in StaffHub’s own settings, even though the employee never selected **Update Email**.
+
+StaffHub’s settings form requires an address and checks its format in the browser. An unwanted address can pass both checks. The security decision belongs on the server, where StaffHub can validate a token tied to the employee’s session before saving an edit.
+
 [TryHackMe room](https://tryhackme.com/room/csrfintroduction) · [Back to Section 07](./README.md)
