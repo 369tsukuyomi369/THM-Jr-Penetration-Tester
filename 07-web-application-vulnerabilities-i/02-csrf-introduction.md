@@ -34,4 +34,12 @@ Three conditions explain how an unwanted profile edit could take effect in the r
 2. The employee’s account has permission to save the edit, such as changing a profile preference.
 3. StaffHub treats the session as sufficient to save the change and skips checking whether the request came from a trusted page.
 
+## Task 4 — Finding CSRF Vulnerabilities
+
+A CSRF review starts with what the server does when someone uses a feature. Opening StaffHub’s settings displays the employee’s email address. Saving a replacement updates the account record. Other examples worth reviewing include changing a password or security preference, linking an account, and adding or removing a payee.
+
+### GET and POST
+
+`GET` is intended for reading data, and forms often use `POST` to save edits. If a handler writes to an account, either method leaves the server with the same question. What evidence ties this update to a trusted page? For an email change, the server could validate a CSRF token tied to the employee’s session before saving the new address.
+
 [TryHackMe room](https://tryhackme.com/room/csrfintroduction) · [Back to Section 07](./README.md)
