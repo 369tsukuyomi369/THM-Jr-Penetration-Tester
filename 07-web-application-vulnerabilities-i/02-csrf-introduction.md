@@ -50,11 +50,29 @@ In the room’s demonstration, an employee is signed in to StaffHub when a form 
 
 StaffHub’s settings form requires an address and checks its format in the browser. An unwanted address can pass both checks. The security decision belongs on the server, where StaffHub can validate a token tied to the employee’s session before saving an edit.
 
+### Room shell commands
+
+```bash
+cd /var/www/html
+nano settings.html
+```
+
+`cd` sets the shell’s working directory to `/var/www/html`. `nano` opens `settings.html` there for editing. If the file is new, Nano creates it on the first save.
+
 ## Task 6 — Exploitation over Weak Tokens
 
 StaffHub checks a hidden token before saving a change to an employee’s role. The value comes from predictable account information, so a match gives the server little evidence that the request came through its own settings page. In the room’s demonstration, an employee interacts with a banner on another page and StaffHub accepts an unintended change that reduces the account’s permissions.
 
 Two employees who share a role should still receive independent, unpredictable CSRF tokens for their sessions. Before saving a role change, the server should check the submitted token against the one it issued for the current session and reject the update if the token is missing or mismatched.
+
+### Room shell commands
+
+```bash
+cd /var/www/html
+nano role.html
+```
+
+Task 6 uses the same directory and opens a separate file, `role.html`, in Nano.
 
 ## Task 7 — Best Practices
 
