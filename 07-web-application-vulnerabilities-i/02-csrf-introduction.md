@@ -54,4 +54,16 @@ StaffHub checks a hidden token before saving a change to an employee’s role. T
 
 Two employees who share a role should still receive independent, unpredictable CSRF tokens for their sessions. Before saving a role change, the server should check the submitted token against the one it issued for the current session and reject the update if the token is missing or mismatched.
 
+## Task 7 — Best Practices
+
+| Review area | What to check |
+| --- | --- |
+| Account changes | Prioritize actions with consequences for the user, such as saving a new email address, changing a password or role, or transferring money. |
+| CSRF tokens | Where tokens are used, check that the server requires an unpredictable value tied to the current session and rejects a missing or invalid token. |
+| HTTP methods | Check that `GET` only retrieves data. For edits submitted with `POST`, identify the server-side check that protects the update. |
+| Requests from other sites | A protection test should confirm that the server rejects an unauthorized cross-site update before it changes the saved account record. |
+| Session cookies | Review when the browser includes the login cookie on cross-site requests and what additional check StaffHub makes before saving an edit. |
+
+A token can remain valid throughout one session. Seeing the same value twice in that session is expected for a per-session design. A value shared across independent sessions or derived from predictable account data warrants review. [OWASP CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern)
+
 [TryHackMe room](https://tryhackme.com/room/csrfintroduction) · [Back to Section 07](./README.md)
